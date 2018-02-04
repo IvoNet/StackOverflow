@@ -19,9 +19,6 @@ package nl.ivonet;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-/**
- * @author Ivo Woltring
- */
 public class HashMapKeyStuff {
 
     /**
