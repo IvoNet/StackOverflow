@@ -1,0 +1,12 @@
+
+
+  cph:
+    build: ./cph
+    dockerfile: Dockerfile.${EXPERIMENT}
+
+
+
+    .
+    ├── cph
+    │   └── Dockerfile.linear
+    └── docker-compose.yml
