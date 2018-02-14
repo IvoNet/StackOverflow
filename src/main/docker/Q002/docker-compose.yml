@@ -1,0 +1,67 @@
+version: '2'
+
+volumes:
+  dados:
+    driver: local
+  media:
+    driver: local
+  static:
+    driver: local
+
+services:
+  beat:
+    build: Docker/beat
+    depends_on:
+      - web
+      - worker
+    restart: always
+    volumes:
+      - ./src:/app/src
+  db:
+    build: Docker/postgres
+    ports:
+      - 5433:5432
+    restart: always
+    volumes:
+      - dados:/var/lib/postgresql/data
+  jupyter:
+    build: Docker/jupyter
+    command: jupyter notebook
+    depends_on:
+      - web
+    ports:
+      - 8888:8888
+    volumes:
+      - ./src:/app/src
+  python:
+    build:
+      context: Docker/python
+      args:
+        REQUIREMENTS_ENV: 'dev'
+    image: helpdesk/python:3.6
+  redis:
+    image: redis:3.2.6
+    ports:
+      - 6379:6379
+    restart: always
+  web:
+    build:
+      context: .
+      dockerfile: Docker/web/Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - python
+      - db
+    ports:
+      - 8001:8000
+    restart: always
+    volumes:
+      - ./src:/app/src
+  worker:
+    build: Docker/worker
+    depends_on:
+      - web
+      - redis
+    restart: always
+    volumes:
+      - ./src:/app/src
