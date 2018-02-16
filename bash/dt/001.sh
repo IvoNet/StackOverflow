@@ -1,6 +1,6 @@
 #!/bin/bash
-i=1
-while [ $i < 6 ]
+I=1
+while [ $I < 6 ];
  do
  j=1
  i=`expr $i +1`
